@@ -1,11 +1,15 @@
-#include <iostream>
+#include "Logger.h"
 
 int main()
 {
-    std::cout << "=====================================\n";
-    std::cout << " Real-Time Audio Processing Engine\n";
-    std::cout << " Version 0.1.0\n";
-    std::cout << "=====================================\n";
+    AudioEngine::Logger::Info("Real-Time Audio Processing Engine");
+    AudioEngine::Logger::Info("Version 0.1.0");
+
+    AudioEngine::Logger::Warning("This is a warning message.");
+
+    AudioEngine::Logger::Error("This is an error message.");
+
+    AudioEngine::Logger::Debug("Debug logging enabled.");
 
     return 0;
 }

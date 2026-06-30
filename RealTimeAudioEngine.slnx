@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="AudioEngine/AudioEngine.vcxproj" />
+  <Project Path="AudioEngine/AudioEngine.vcxproj" Id="64c20d47-f16f-47e3-aaa9-9a1541270bed" />
 </Solution>
