@@ -1,0 +1,6 @@
+{
+    "sampleRate": 48000,
+    "bufferSize": 512,
+    "channels": 2,
+    "enableDebug": true
+}

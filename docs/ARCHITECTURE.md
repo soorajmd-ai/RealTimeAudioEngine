@@ -2,15 +2,13 @@
 
 ## Current Architecture
 
-```
-Application
-    │
-    ▼
 main.cpp
     │
-    ▼
-AudioEngine::Logger
-```
+    ├── Logger
+    │
+    └── ConfigManager
+            │
+            └── nlohmann::json
 
 ---
 
@@ -41,3 +39,32 @@ Future Improvements:
 - [ ] Thread-safe logging
 - [ ] Colored console output
 - [ ] Real-time safe asynchronous logging
+
+### ConfigManager
+
+Status: ✅ Basic Implementation Complete
+
+Current Features:
+
+- Loads JSON configuration
+- Stores application settings
+- Provides getter functions
+
+Next Improvements:
+
+- Default values
+- Validation
+- Exception handling
+- Save configuration
+
+### Module Dependency
+
+main.cpp
+    ↓
+ConfigManager
+    ↓
+nlohmann::json
+
+Design Principle:
+
+Higher-level modules should depend on interfaces, not implementation details.
