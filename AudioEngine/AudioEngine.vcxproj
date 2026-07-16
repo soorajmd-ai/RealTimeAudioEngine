@@ -145,6 +145,7 @@
     <ClCompile Include="..\src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\buffer\RingBuffer.h" />
     <ClInclude Include="..\include\ConfigManager.h" />
     <ClInclude Include="..\include\Logger.h" />
   </ItemGroup>

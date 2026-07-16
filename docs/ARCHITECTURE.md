@@ -68,3 +68,42 @@ nlohmann::json
 Design Principle:
 
 Higher-level modules should depend on interfaces, not implementation details.
+
+## RingBuffer
+
+Purpose:
+- Temporary storage between producer and consumer threads.
+
+Template Type:
+- Generic (RingBuffer<T>)
+
+Internal State:
+- std::vector<T> buffer
+- head index
+- tail index
+- size
+- capacity
+
+RingBuffer Design
+
+- Generic template class
+- Header-only implementation
+- Fixed-capacity storage
+- Pre-allocated memory
+- STL-style interface
+
+### RingBuffer Operations
+
+Implemented:
+- push()
+- pop()
+- size()
+- capacity()
+- empty()
+- full()
+
+Characteristics:
+- FIFO
+- Fixed capacity
+- Circular indexing using modulo (%)
+- No dynamic memory allocation after construction

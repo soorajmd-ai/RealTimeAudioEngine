@@ -1,5 +1,6 @@
 #include "Logger.h"
 #include "ConfigManager.h"
+#include "buffer/RingBuffer.h"
 
 #include <iostream>
 #include <filesystem>
@@ -30,6 +31,34 @@ int main()
         << std::boolalpha
         << config.IsDebugEnabled()
         << '\n';
+
+    AudioEngine::RingBuffer<int> buffer(5);
+
+    buffer.push(10);
+    buffer.push(20);
+    buffer.push(30);
+    buffer.push(40);
+    buffer.push(50);
+
+    int value;
+
+    // Pop first 3 elements
+    for (int i = 0; i < 3; i++)
+    {
+        buffer.pop(value);
+        std::cout << "Popped: " << value << std::endl;
+    }
+
+    // Push again
+    buffer.push(60);
+    buffer.push(70);
+    buffer.push(80);
+
+    // Pop everything
+    while (buffer.pop(value))
+    {
+        std::cout << "Popped: " << value << std::endl;
+    }
 
     return 0;
 }
