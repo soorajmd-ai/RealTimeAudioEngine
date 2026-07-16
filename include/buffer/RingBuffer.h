@@ -78,6 +78,28 @@ namespace AudioEngine
             return true;
         }
 
+        bool peek(T& value) const
+        {
+            if (empty())
+            {
+                return false;
+            }
+
+            value = m_buffer[m_head];
+
+            return true;
+        }
+
+        std::size_t available() const
+        {
+            return m_size;
+        }
+
+        std::size_t freeSpace() const
+        {
+            return m_capacity - m_size;
+        }
+
     private:
 
         std::vector<T> m_buffer; //This is our actual memory.

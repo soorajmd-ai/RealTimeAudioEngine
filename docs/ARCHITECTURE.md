@@ -107,3 +107,18 @@ Characteristics:
 - Fixed capacity
 - Circular indexing using modulo (%)
 - No dynamic memory allocation after construction
+
+### RingBuffer API
+
+Current Functions
+
+- push()
+- pop()
+- peek()
+- clear()
+- size()
+- capacity()
+- available()
+- freeSpace()
+- empty()
+- full()
