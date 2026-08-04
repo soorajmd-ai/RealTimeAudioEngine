@@ -1,33 +1,28 @@
 #include "Logger.h"
 #include "ConfigManager.h"
 #include "buffer/RingBuffer.h"
+#include "thread/ThreadManager.h"
+#include "core/AudioEngine.h"
 
 #include <iostream>
 #include <filesystem>
+#include <thread>
+#include <chrono>
 
 int main()
 {
-    AudioEngine::RingBuffer<int> buffer(5);
+    AudioEngine::AudioEngine engine;
 
-    buffer.push(10);
-    buffer.push(20);
-    buffer.push(30);
-
-    std::cout << "\nAvailable : " << buffer.available() << std::endl;
-    std::cout << "Free Space: " << buffer.freeSpace() << std::endl;
-
-    int value;
-
-    if (buffer.peek(value))
+    if (!engine.Initialize())
     {
-        std::cout << "Peeked: " << value << std::endl;
+        return -1;
     }
 
-    while (buffer.pop(value))
-    {
-        std::cout << "Popped: " << value << std::endl;
-    }
+    engine.Run();
 
-    std::cout << "\nAvailable : " << buffer.available() << std::endl;
-    std::cout << "Free Space: " << buffer.freeSpace() << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+
+    engine.Shutdown();
+
+    return 0;
 }

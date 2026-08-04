@@ -122,3 +122,18 @@ Current Functions
 - freeSpace()
 - empty()
 - full()
+
+## ThreadManager
+
+Current Features:
+- Thread creation
+- Worker thread
+- Graceful shutdown
+- RAII cleanup
+- Thread joining
+
+### ThreadManager Improvements
+
+- Replaced bool with std::atomic<bool>
+- Eliminated data race on thread state
+- Prepared for lock-free synchronization

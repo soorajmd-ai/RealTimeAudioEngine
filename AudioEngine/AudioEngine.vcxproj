@@ -140,14 +140,18 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\code\AudioEngine.cpp" />
     <ClCompile Include="..\src\ConfigManager.cpp" />
     <ClCompile Include="..\src\Logger.cpp" />
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\thread\ThreadManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\buffer\RingBuffer.h" />
     <ClInclude Include="..\include\ConfigManager.h" />
+    <ClInclude Include="..\include\core\AudioEngine.h" />
     <ClInclude Include="..\include\Logger.h" />
+    <ClInclude Include="..\include\thread\ThreadManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

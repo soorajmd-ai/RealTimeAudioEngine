@@ -109,3 +109,21 @@ Next:
 - empty()
 - full()
 - Wrap-around functionality verified
+
+## Version 0.3.0
+
+### Completed
+
+- ThreadManager
+- Basic thread lifecycle
+- RAII cleanup
+
+## Version 0.4.0
+
+### Completed
+
+- AudioEngine core class
+- Centralized application lifecycle
+- Module integration
+  - ConfigManager
+  - ThreadManager
