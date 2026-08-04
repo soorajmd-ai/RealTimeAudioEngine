@@ -24,6 +24,10 @@ namespace AudioEngine
         }
 
         Logger::Info("Configuration loaded successfully.");
+        if (!m_portAudio.Initialize())
+        {
+            return false;
+        }
 
         return true;
     }
@@ -38,6 +42,8 @@ namespace AudioEngine
     void AudioEngine::Shutdown()
     {
         Logger::Info("Shutting down Audio Engine...");
+
+        m_portAudio.Terminate();
 
         m_threadManager.Stop();
     }

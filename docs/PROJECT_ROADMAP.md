@@ -127,3 +127,12 @@ Next:
 - Module integration
   - ConfigManager
   - ThreadManager
+
+## Version 0.5.0
+
+### Completed
+
+- PortAudio integrated
+- Third-party library built from source using CMake
+- AudioEngine now initializes and terminates PortAudio
+- Successfully linked external C library with Modern C++ project

@@ -30,6 +30,9 @@
     <ClCompile Include="..\src\code\AudioEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\io\PortAudioWrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Logger.h">
@@ -45,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\core\AudioEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\io\PortAudioWrapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

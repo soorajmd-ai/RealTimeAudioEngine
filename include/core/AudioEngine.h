@@ -2,6 +2,7 @@
 
 #include "ConfigManager.h"
 #include "thread/ThreadManager.h"
+#include "io/PortAudioWrapper.h"
 
 namespace AudioEngine
 {
@@ -24,5 +25,7 @@ namespace AudioEngine
         ConfigManager m_configManager;
 
         ThreadManager m_threadManager;
+
+        PortAudioWrapper m_portAudio;
     };
 }
