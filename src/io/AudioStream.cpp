@@ -1,16 +1,18 @@
 #include "io/AudioStream.h"
 #include "Logger.h"
+#include "buffer/RingBuffer.h"
 #include <atomic>
 
 static std::atomic<int> g_callbackCount = 0;
+static AudioEngine::RingBuffer<float> g_audioBuffer(8192);
 
 static int AudioCallback(
     const void* input,
     void* output,
     unsigned long frameCount,
-    const PaStreamCallbackTimeInfo* timeInfo,
-    PaStreamCallbackFlags statusFlags,
-    void* userData)
+    const PaStreamCallbackTimeInfo*,
+    PaStreamCallbackFlags,
+    void*)
 {
     const float* inputBuffer =
         static_cast<const float*>(input);
@@ -18,7 +20,7 @@ static int AudioCallback(
     float* outputBuffer =
         static_cast<float*>(output);
 
-    if (inputBuffer == nullptr)
+    if (!inputBuffer)
     {
         for (unsigned long i = 0; i < frameCount; ++i)
         {
@@ -28,9 +30,25 @@ static int AudioCallback(
         return paContinue;
     }
 
+    // Capture microphone samples
     for (unsigned long i = 0; i < frameCount; ++i)
     {
-        outputBuffer[i] = inputBuffer[i];
+        g_audioBuffer.push(inputBuffer[i]);
+    }
+
+    // Playback from our RingBuffer
+    for (unsigned long i = 0; i < frameCount; ++i)
+    {
+        float sample = 0.0f;
+
+        if (g_audioBuffer.pop(sample))
+        {
+            outputBuffer[i] = sample;
+        }
+        else
+        {
+            outputBuffer[i] = 0.0f;
+        }
     }
 
     return paContinue;

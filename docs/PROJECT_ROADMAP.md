@@ -163,3 +163,30 @@ Next:
 - Implemented audio callback
 - Real-time microphone-to-speaker pass-through
 - Verified live audio processing
+
+## Version 0.9.0
+
+### Completed
+
+- Opened a real PortAudio stream
+- Implemented a real-time audio callback
+- Achieved live microphone-to-speaker pass-through
+- Integrated RingBuffer<float> into the real-time audio pipeline
+- Verified live audio samples are flowing through the custom RingBuffer
+- Established the foundation for the DSP processing pipeline
+
+### Current Audio Pipeline
+
+Microphone
+↓
+PortAudio Callback
+↓
+RingBuffer<float>
+↓
+Speaker
+
+### Next Milestone
+
+- Implement Gain DSP module
+- Process audio samples inside the callback
+- Build a modular DSP processing chain
