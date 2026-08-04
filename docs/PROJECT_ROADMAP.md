@@ -154,3 +154,12 @@ Next:
 - AudioEngine now controls AudioStream lifecycle
 - Implemented Open/Start/Stop/Close interfaces
 - Prepared architecture for real-time audio streaming
+
+## Version 0.8.0
+
+### Completed
+
+- Opened a real PortAudio stream
+- Implemented audio callback
+- Real-time microphone-to-speaker pass-through
+- Verified live audio processing
