@@ -15,5 +15,7 @@ namespace AudioEngine
         bool Initialize();
 
         void Terminate();
+
+        void PrintAudioDevices() const;
     };
 }

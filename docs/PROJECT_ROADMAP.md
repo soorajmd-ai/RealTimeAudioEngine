@@ -136,3 +136,12 @@ Next:
 - Third-party library built from source using CMake
 - AudioEngine now initializes and terminates PortAudio
 - Successfully linked external C library with Modern C++ project
+
+## Version 0.6.0
+
+### Completed
+
+- Integrated PortAudio
+- Enumerated available audio devices
+- AudioEngine can detect microphones and speakers
+- Successfully integrated a third-party C audio library

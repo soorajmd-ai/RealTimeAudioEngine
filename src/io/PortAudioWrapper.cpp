@@ -24,6 +24,8 @@ namespace AudioEngine
 
         Logger::Info(Pa_GetVersionText());
 
+        PrintAudioDevices();
+
         return true;
     }
 
@@ -32,6 +34,34 @@ namespace AudioEngine
         Pa_Terminate();
 
         Logger::Info("PortAudio terminated.");
+    }
+
+    void PortAudioWrapper::PrintAudioDevices() const
+    {
+       
+        int deviceCount = Pa_GetDeviceCount();
+
+        if (deviceCount < 0)
+        {
+            Logger::Error("Failed to retrieve audio devices.");
+            return;
+        }
+
+        Logger::Info("========== Available Audio Devices ==========");
+
+        for (int i = 0; i < deviceCount; ++i)
+        {
+            const PaDeviceInfo* deviceInfo = Pa_GetDeviceInfo(i);
+
+            if (deviceInfo)
+            {
+                std::string info = std::to_string(i) +
+                    " : " +
+                    deviceInfo->name;
+
+                Logger::Info(info);
+            }
+        }
     }
 
 }
