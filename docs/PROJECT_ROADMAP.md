@@ -145,3 +145,12 @@ Next:
 - Enumerated available audio devices
 - AudioEngine can detect microphones and speakers
 - Successfully integrated a third-party C audio library
+
+## Version 0.7.0
+
+### Completed
+
+- Added AudioStream abstraction
+- AudioEngine now controls AudioStream lifecycle
+- Implemented Open/Start/Stop/Close interfaces
+- Prepared architecture for real-time audio streaming

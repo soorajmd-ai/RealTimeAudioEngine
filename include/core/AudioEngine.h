@@ -3,6 +3,7 @@
 #include "ConfigManager.h"
 #include "thread/ThreadManager.h"
 #include "io/PortAudioWrapper.h"
+#include "io/AudioStream.h"
 
 namespace AudioEngine
 {
@@ -27,5 +28,7 @@ namespace AudioEngine
         ThreadManager m_threadManager;
 
         PortAudioWrapper m_portAudio;
+
+        AudioStream m_audioStream;
     };
 }

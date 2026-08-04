@@ -29,6 +29,11 @@ namespace AudioEngine
             return false;
         }
 
+        if (!m_audioStream.OpenDefaultStream())
+        {
+            return false;
+        }
+
         return true;
     }
 
@@ -36,12 +41,18 @@ namespace AudioEngine
     {
         Logger::Info("Starting Audio Engine...");
 
+        m_audioStream.Start();
+
         m_threadManager.Start();
     }
 
     void AudioEngine::Shutdown()
     {
         Logger::Info("Shutting down Audio Engine...");
+
+        m_audioStream.Stop();
+
+        m_audioStream.Close();
 
         m_portAudio.Terminate();
 
