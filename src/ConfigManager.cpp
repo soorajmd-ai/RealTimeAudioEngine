@@ -26,6 +26,9 @@ namespace AudioEngine
         m_channels = jsonData["channels"];
         m_enableDebug = jsonData["enableDebug"];
 
+        m_gain = jsonData["gain"];
+        m_lowPassAlpha = jsonData["lowPassAlpha"];
+
         return true;
     }
 
@@ -47,5 +50,15 @@ namespace AudioEngine
     bool ConfigManager::IsDebugEnabled() const
     {
         return m_enableDebug;
+    }
+
+    float ConfigManager::GetGain() const
+    {
+        return m_gain;
+    }
+
+    float ConfigManager::GetLowPassAlpha() const
+    {
+        return m_lowPassAlpha;
     }
 }

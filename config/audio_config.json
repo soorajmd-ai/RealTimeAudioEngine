@@ -2,5 +2,9 @@
     "sampleRate": 48000,
     "bufferSize": 512,
     "channels": 2,
-    "enableDebug": true
+    "enableDebug": true,
+
+    "gain": 2.0,
+
+    "lowPassAlpha": 0.2
 }

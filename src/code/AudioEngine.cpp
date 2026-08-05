@@ -24,6 +24,13 @@ namespace AudioEngine
         }
 
         Logger::Info("Configuration loaded successfully.");
+
+        m_audioStream.SetGain(
+            m_configManager.GetGain());
+
+        m_audioStream.SetLowPassAlpha(
+            m_configManager.GetLowPassAlpha());
+
         if (!m_portAudio.Initialize())
         {
             return false;

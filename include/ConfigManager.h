@@ -18,6 +18,10 @@ namespace AudioEngine
 
         bool IsDebugEnabled() const;
 
+        float GetGain() const;
+
+        float GetLowPassAlpha() const;
+
     private:
 
         int m_sampleRate;
@@ -27,5 +31,9 @@ namespace AudioEngine
         int m_channels;
 
         bool m_enableDebug;
+
+        float m_gain;
+
+        float m_lowPassAlpha;
     };
 }

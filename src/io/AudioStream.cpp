@@ -7,11 +7,6 @@
 #include <atomic>
 
 static std::atomic<int> g_callbackCount = 0;
-static AudioEngine::RingBuffer<float> g_audioBuffer(8192);
-static AudioEngine::Gain g_gain;
-static AudioEngine::DSPChain g_dspChain;
-static AudioEngine::LowPassFilter g_lowPass;
-
 
 static int AudioCallback(
     const void* input,
@@ -19,46 +14,15 @@ static int AudioCallback(
     unsigned long frameCount,
     const PaStreamCallbackTimeInfo*,
     PaStreamCallbackFlags,
-    void*)
+    void* userData)
 {
-    const float* inputBuffer =
-        static_cast<const float*>(input);
+    AudioEngine::AudioStream* audioStream =
+        static_cast<AudioEngine::AudioStream*>(userData);
 
-    float* outputBuffer =
-        static_cast<float*>(output);
-
-    if (!inputBuffer)
-    {
-        for (unsigned long i = 0; i < frameCount; ++i)
-        {
-            outputBuffer[i] = 0.0f;
-        }
-
-        return paContinue;
-    }
-
-    // Capture microphone samples
-    for (unsigned long i = 0; i < frameCount; ++i)
-    {
-        g_audioBuffer.push(inputBuffer[i]);
-    }
-
-    // Playback from our RingBuffer
-    for (unsigned long i = 0; i < frameCount; ++i)
-    {
-        float sample = 0.0f;
-
-        if (g_audioBuffer.pop(sample))
-        {
-            outputBuffer[i] = g_dspChain.Process(sample);
-        }
-        else
-        {
-            outputBuffer[i] = 0.0f;
-        }
-    }
-
-    return paContinue;
+    return audioStream->ProcessAudio(
+        input,
+        output,
+        frameCount);
 }
 
 namespace AudioEngine
@@ -66,11 +30,67 @@ namespace AudioEngine
 
     AudioStream::AudioStream()
         :
-        m_stream(nullptr)
+        m_stream(nullptr),
+        m_ringBuffer(8192)
     {}
 
     AudioStream::~AudioStream()
     {}
+
+    void AudioStream::SetGain(float gain)
+    {
+        m_gain.SetGain(gain);
+    }
+
+    void AudioStream::SetLowPassAlpha(float alpha)
+    {
+        m_lowPass.SetAlpha(alpha);
+    }
+
+    int AudioEngine::AudioStream::ProcessAudio(
+        const void* input,
+        void* output,
+        unsigned long frameCount)
+    {
+        const float* inputBuffer =
+            static_cast<const float*>(input);
+
+        float* outputBuffer =
+            static_cast<float*>(output);
+
+        if (!inputBuffer)
+        {
+            for (unsigned long i = 0; i < frameCount; ++i)
+            {
+                outputBuffer[i] = 0.0f;
+            }
+
+            return paContinue;
+        }
+
+        // Capture microphone samples
+        for (unsigned long i = 0; i < frameCount; ++i)
+        {
+            m_ringBuffer.push(inputBuffer[i]);
+        }
+
+        // Playback from our RingBuffer
+        for (unsigned long i = 0; i < frameCount; ++i)
+        {
+            float sample = 0.0f;
+
+            if (m_ringBuffer.pop(sample))
+            {
+                outputBuffer[i] = m_dspChain.Process(sample);
+            }
+            else
+            {
+                outputBuffer[i] = 0.0f;
+            }
+        }
+
+        return paContinue;
+    }
 
     bool AudioStream::OpenDefaultStream()
     {
@@ -85,7 +105,7 @@ namespace AudioEngine
                 48000,
                 512,
                 AudioCallback,
-                nullptr); 
+                this);
 
         if (error != paNoError)
         {
@@ -94,10 +114,10 @@ namespace AudioEngine
         }
 
         Logger::Info("Audio stream opened successfully.");
-        g_gain.SetGain(2.0f);
-        g_lowPass.SetAlpha(0.02f);
-        g_dspChain.AddModule(&g_gain);
-        g_dspChain.AddModule(&g_lowPass);
+        
+        m_dspChain.AddModule(&m_gain);
+
+        m_dspChain.AddModule(&m_lowPass);
 
         return true;
     }

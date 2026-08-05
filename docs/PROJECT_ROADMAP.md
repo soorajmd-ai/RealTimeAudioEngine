@@ -207,3 +207,23 @@ Speaker
 - Refactor AudioStream to own the DSP pipeline
 - Remove global audio-processing objects
 - Use PortAudio userData for callback context
+
+## Version 1.1.0
+
+### Completed
+
+- Refactored `AudioStream` to own the DSP pipeline
+- Removed global DSP processing objects
+- Migrated audio callback processing into `AudioStream`
+- Added configurable DSP parameters through `audio_config.json`
+- Added Gain configuration via `ConfigManager`
+- Added Low-Pass Filter configuration via `ConfigManager`
+- Connected `AudioEngine` with `AudioStream` configuration
+- Verified runtime DSP configuration using JSON
+- Verified real-time microphone processing with configurable Gain and Low-Pass Filter
+
+### Next Milestone
+
+- Introduce `AudioBuffer` abstraction for block-based audio processing
+- Refactor DSP modules to process audio buffers instead of single samples
+- Support runtime DSP parameter updates without restarting
