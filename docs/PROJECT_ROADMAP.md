@@ -190,3 +190,20 @@ Speaker
 - Implement Gain DSP module
 - Process audio samples inside the callback
 - Build a modular DSP processing chain
+
+## Version 1.0.0
+
+### Completed
+
+- Added DSPModule base interface
+- Implemented DSPChain for modular audio processing
+- Added Gain DSP module
+- Added LowPassFilter DSP module
+- Integrated multiple DSP modules into the real-time audio callback
+- Verified real-time DSP processing on live microphone audio
+
+### Next Milestone
+
+- Refactor AudioStream to own the DSP pipeline
+- Remove global audio-processing objects
+- Use PortAudio userData for callback context

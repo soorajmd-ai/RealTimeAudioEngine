@@ -1,10 +1,17 @@
 #include "io/AudioStream.h"
 #include "Logger.h"
 #include "buffer/RingBuffer.h"
+#include "dsp/Gain.h"
+#include "dsp/DSPChain.h"
+#include "dsp/LowPassFilter.h"
 #include <atomic>
 
 static std::atomic<int> g_callbackCount = 0;
 static AudioEngine::RingBuffer<float> g_audioBuffer(8192);
+static AudioEngine::Gain g_gain;
+static AudioEngine::DSPChain g_dspChain;
+static AudioEngine::LowPassFilter g_lowPass;
+
 
 static int AudioCallback(
     const void* input,
@@ -43,7 +50,7 @@ static int AudioCallback(
 
         if (g_audioBuffer.pop(sample))
         {
-            outputBuffer[i] = sample;
+            outputBuffer[i] = g_dspChain.Process(sample);
         }
         else
         {
@@ -87,6 +94,10 @@ namespace AudioEngine
         }
 
         Logger::Info("Audio stream opened successfully.");
+        g_gain.SetGain(2.0f);
+        g_lowPass.SetAlpha(0.02f);
+        g_dspChain.AddModule(&g_gain);
+        g_dspChain.AddModule(&g_lowPass);
 
         return true;
     }

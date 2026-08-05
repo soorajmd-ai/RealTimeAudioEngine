@@ -1,11 +1,6 @@
-#include "Logger.h"
-#include "ConfigManager.h"
-#include "buffer/RingBuffer.h"
-#include "thread/ThreadManager.h"
 #include "core/AudioEngine.h"
+#include "Logger.h"
 
-#include <iostream>
-#include <filesystem>
 #include <thread>
 #include <chrono>
 
@@ -21,6 +16,8 @@ int main()
     engine.Run();
 
     std::this_thread::sleep_for(std::chrono::seconds(5));
+
+    engine.Shutdown();
 
     return 0;
 }
