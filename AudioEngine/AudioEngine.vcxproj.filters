@@ -45,6 +45,9 @@
     <ClCompile Include="..\src\dsp\LowPassFilter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\dsp\Delay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Logger.h">
@@ -78,6 +81,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\dsp\LowPassFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\dsp\Delay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

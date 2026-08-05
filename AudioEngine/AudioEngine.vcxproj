@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\code\AudioEngine.cpp" />
     <ClCompile Include="..\src\ConfigManager.cpp" />
+    <ClCompile Include="..\src\dsp\Delay.cpp" />
     <ClCompile Include="..\src\dsp\DSPChain.cpp" />
     <ClCompile Include="..\src\dsp\Gain.cpp" />
     <ClCompile Include="..\src\dsp\LowPassFilter.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="..\include\buffer\RingBuffer.h" />
     <ClInclude Include="..\include\ConfigManager.h" />
     <ClInclude Include="..\include\core\AudioEngine.h" />
+    <ClInclude Include="..\include\dsp\Delay.h" />
     <ClInclude Include="..\include\dsp\DSPChain.h" />
     <ClInclude Include="..\include\dsp\DSPModule.h" />
     <ClInclude Include="..\include\dsp\Gain.h" />

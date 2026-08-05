@@ -227,3 +227,20 @@ Speaker
 - Introduce `AudioBuffer` abstraction for block-based audio processing
 - Refactor DSP modules to process audio buffers instead of single samples
 - Support runtime DSP parameter updates without restarting
+
+## Version 1.2.0
+
+### Completed
+
+- Added Delay DSP module
+- Implemented circular buffer–based delay processing
+- Added configurable delay length
+- Added feedback for repeated echoes
+- Integrated Delay into the DSP chain
+- Verified real-time echo effect using live microphone input
+
+### Next Milestone
+
+- Implement High-Pass Filter
+- Introduce additional DSP modules
+- Build a configurable Equalizer

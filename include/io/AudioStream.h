@@ -4,6 +4,7 @@
 #include "dsp/DSPChain.h"
 #include "dsp/Gain.h"
 #include "dsp/LowPassFilter.h"
+#include "dsp/Delay.h"
 
 #include <portaudio.h>
 
@@ -43,6 +44,8 @@ namespace AudioEngine
         Gain m_gain;
 
         LowPassFilter m_lowPass;
+
+        Delay m_delay;
 
         PaStream* m_stream;
     };

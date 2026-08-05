@@ -114,10 +114,16 @@ namespace AudioEngine
         }
 
         Logger::Info("Audio stream opened successfully.");
-        
+
+        m_delay.SetDelaySamples(12000);
+
+        m_delay.SetFeedback(0.6f);
+
         m_dspChain.AddModule(&m_gain);
 
         m_dspChain.AddModule(&m_lowPass);
+
+        m_dspChain.AddModule(&m_delay);
 
         return true;
     }
