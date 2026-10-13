@@ -19,6 +19,8 @@ static int AudioCallback(
     AudioEngine::AudioStream* audioStream =
         static_cast<AudioEngine::AudioStream*>(userData);
 
+    ++g_callbackCount;
+
     return audioStream->ProcessAudio(
         input,
         output,
@@ -31,7 +33,12 @@ namespace AudioEngine
     AudioStream::AudioStream()
         :
         m_stream(nullptr),
-        m_ringBuffer(8192)
+        m_ringBuffer(8192),
+        m_gainEnabled(true),
+        m_lowPassEnabled(true),
+        m_highPassEnabled(true),
+        m_delayEnabled(true),
+        m_equalizerEnabled(true)
     {}
 
     AudioStream::~AudioStream()
@@ -45,6 +52,46 @@ namespace AudioEngine
     void AudioStream::SetLowPassAlpha(float alpha)
     {
         m_lowPass.SetAlpha(alpha);
+    }
+
+    void AudioStream::SetHighPassAlpha(float alpha)
+    {
+        m_highPass.SetAlpha(alpha);
+    }
+
+    void AudioStream::SetDelaySamples(int samples)
+    {
+        m_delay.SetDelaySamples(samples);
+    }
+
+    void AudioStream::SetDelayFeedback(float feedback)
+    {
+        m_delay.SetFeedback(feedback);
+    }
+
+    void AudioStream::EnableGain(bool enable)
+    {
+        m_gainEnabled = enable;
+    }
+
+    void AudioStream::EnableLowPass(bool enable)
+    {
+        m_lowPassEnabled = enable;
+    }
+
+    void AudioStream::EnableHighPass(bool enable)
+    {
+        m_highPassEnabled = enable;
+    }
+
+    void AudioStream::EnableDelay(bool enable)
+    {
+        m_delayEnabled = enable;
+    }
+
+    void AudioStream::EnableEqualizer(bool enable)
+    {
+        m_equalizerEnabled = enable;
     }
 
     int AudioEngine::AudioStream::ProcessAudio(
@@ -115,15 +162,41 @@ namespace AudioEngine
 
         Logger::Info("Audio stream opened successfully.");
 
-        m_delay.SetDelaySamples(12000);
+        m_equalizer.SetBassGain(2.0f);
 
-        m_delay.SetFeedback(0.6f);
+        m_equalizer.SetMidGain(1.0f);
 
-        m_dspChain.AddModule(&m_gain);
+        m_equalizer.SetTrebleGain(0.5f);
+                
+        if (m_gainEnabled)
+        {
+            Logger::Info("Adding Gain Module");
+            m_dspChain.AddModule(&m_gain);
+        }
 
-        m_dspChain.AddModule(&m_lowPass);
+        if (m_lowPassEnabled)
+        {
+            Logger::Info("Adding LowPass Module");
+            m_dspChain.AddModule(&m_lowPass);
+        }
 
-        m_dspChain.AddModule(&m_delay);
+        if (m_highPassEnabled)
+        {
+            Logger::Info("Adding HighPass Module");
+            m_dspChain.AddModule(&m_highPass);
+        }
+
+        if (m_delayEnabled)
+        {
+            Logger::Info("Adding Delay Module");
+            m_dspChain.AddModule(&m_delay);
+        }
+
+        if (m_equalizerEnabled)
+        {
+            Logger::Info("Adding Equalizer Module");
+            m_dspChain.AddModule(&m_equalizer);
+        }
 
         return true;
     }

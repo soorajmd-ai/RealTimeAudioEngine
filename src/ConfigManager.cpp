@@ -26,8 +26,23 @@ namespace AudioEngine
         m_channels = jsonData["channels"];
         m_enableDebug = jsonData["enableDebug"];
 
+        m_gainEnabled = jsonData["gainEnabled"];
+
+        m_lowPassEnabled = jsonData["lowPassEnabled"];
+
+        m_highPassEnabled = jsonData["highPassEnabled"];
+
+        m_delayEnabled = jsonData["delayEnabled"];
+
         m_gain = jsonData["gain"];
+
         m_lowPassAlpha = jsonData["lowPassAlpha"];
+
+        m_highPassAlpha = jsonData["highPassAlpha"];
+
+        m_delaySamples = jsonData["delaySamples"];
+
+        m_delayFeedback = jsonData["delayFeedback"];
 
         return true;
     }
@@ -60,5 +75,40 @@ namespace AudioEngine
     float ConfigManager::GetLowPassAlpha() const
     {
         return m_lowPassAlpha;
+    }
+
+    float ConfigManager::GetHighPassAlpha() const
+    {
+        return m_highPassAlpha;
+    }
+
+    int ConfigManager::GetDelaySamples() const
+    {
+        return m_delaySamples;
+    }
+
+    float ConfigManager::GetDelayFeedback() const
+    {
+        return m_delayFeedback;
+    }
+
+    bool ConfigManager::IsGainEnabled() const
+    {
+        return m_gainEnabled;
+    }
+
+    bool ConfigManager::IsLowPassEnabled() const
+    {
+        return m_lowPassEnabled;
+    }
+
+    bool ConfigManager::IsHighPassEnabled() const
+    {
+        return m_highPassEnabled;
+    }
+
+    bool ConfigManager::IsDelayEnabled() const
+    {
+        return m_delayEnabled;
     }
 }

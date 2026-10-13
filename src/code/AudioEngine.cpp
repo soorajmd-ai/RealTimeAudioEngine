@@ -36,6 +36,33 @@ namespace AudioEngine
             return false;
         }
 
+        m_audioStream.EnableGain(
+            m_configManager.IsGainEnabled());
+
+        m_audioStream.EnableLowPass(
+            m_configManager.IsLowPassEnabled());
+
+        m_audioStream.EnableHighPass(
+            m_configManager.IsHighPassEnabled());
+
+        m_audioStream.EnableDelay(
+            m_configManager.IsDelayEnabled());
+
+        m_audioStream.SetGain(
+            m_configManager.GetGain());
+
+        m_audioStream.SetLowPassAlpha(
+            m_configManager.GetLowPassAlpha());
+
+        m_audioStream.SetHighPassAlpha(
+            m_configManager.GetHighPassAlpha());
+
+        m_audioStream.SetDelaySamples(
+            m_configManager.GetDelaySamples());
+
+        m_audioStream.SetDelayFeedback(
+            m_configManager.GetDelayFeedback());
+
         if (!m_audioStream.OpenDefaultStream())
         {
             return false;

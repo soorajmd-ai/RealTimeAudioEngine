@@ -5,6 +5,8 @@
 #include "dsp/Gain.h"
 #include "dsp/LowPassFilter.h"
 #include "dsp/Delay.h"
+#include "dsp/HighPassFilter.h"
+#include "dsp/Equalizer.h"
 
 #include <portaudio.h>
 
@@ -23,6 +25,22 @@ namespace AudioEngine
         void SetGain(float gain);
 
         void SetLowPassAlpha(float alpha);
+
+        void SetHighPassAlpha(float alpha);
+
+        void SetDelaySamples(int samples);
+
+        void SetDelayFeedback(float feedback);
+
+        void EnableGain(bool enable);
+
+        void EnableLowPass(bool enable);
+
+        void EnableHighPass(bool enable);
+
+        void EnableDelay(bool enable);
+
+        void EnableEqualizer(bool enable);
 
         bool Start();
 
@@ -45,8 +63,22 @@ namespace AudioEngine
 
         LowPassFilter m_lowPass;
 
+        HighPassFilter m_highPass;
+
         Delay m_delay;
 
+        Equalizer m_equalizer;
+
         PaStream* m_stream;
+
+        bool m_gainEnabled;
+
+        bool m_lowPassEnabled;
+
+        bool m_highPassEnabled;
+
+        bool m_delayEnabled;
+
+        bool m_equalizerEnabled;
     };
 }

@@ -22,6 +22,20 @@ namespace AudioEngine
 
         float GetLowPassAlpha() const;
 
+        float GetHighPassAlpha() const;
+
+        int GetDelaySamples() const;
+
+        float GetDelayFeedback() const;
+
+        bool IsGainEnabled() const;
+
+        bool IsLowPassEnabled() const;
+
+        bool IsHighPassEnabled() const;
+
+        bool IsDelayEnabled() const;
+
     private:
 
         int m_sampleRate;
@@ -35,5 +49,19 @@ namespace AudioEngine
         float m_gain;
 
         float m_lowPassAlpha;
+
+        float m_highPassAlpha;
+
+        int m_delaySamples;
+
+        float m_delayFeedback;
+
+        bool m_gainEnabled;
+
+        bool m_lowPassEnabled;
+
+        bool m_highPassEnabled;
+
+        bool m_delayEnabled;
     };
 }

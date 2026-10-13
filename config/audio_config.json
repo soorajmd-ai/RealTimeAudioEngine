@@ -4,7 +4,18 @@
     "channels": 2,
     "enableDebug": true,
 
+    "gainEnabled": true,
+    "lowPassEnabled": true,
+    "highPassEnabled": true,
+    "delayEnabled": false,
+
     "gain": 2.0,
 
-    "lowPassAlpha": 0.2
+    "lowPassAlpha": 0.2,
+
+    "highPassAlpha": 0.95,
+
+    "delaySamples": 12000,
+
+    "delayFeedback": 0.6
 }
