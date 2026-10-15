@@ -1,16 +1,17 @@
 #include "dsp/DSPChain.h"
+#include <utility>
 
 namespace AudioEngine
 {
 
-    void DSPChain::AddModule(DSPModule* module)
+    void DSPChain::AddModule(std::unique_ptr<DSPModule> module)
     {
-        m_modules.push_back(module);
+        m_modules.push_back(std::move(module));
     }
 
     float DSPChain::Process(float sample)
     {
-        for (DSPModule* module : m_modules)
+        for (auto& module : m_modules)
         {
             sample = module->Process(sample);
         }

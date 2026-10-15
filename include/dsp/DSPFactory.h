@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
 namespace AudioEngine
 {
@@ -9,8 +10,6 @@ namespace AudioEngine
     class DSPFactory
     {
     public:
-
-        static DSPModule* Create(
-            const std::string& moduleName);
+        static std::unique_ptr<DSPModule> Create(const std::string& moduleName);
     };
 }

@@ -1,5 +1,4 @@
 #include "dsp/DSPFactory.h"
-
 #include "dsp/DSPModule.h"
 #include "dsp/Gain.h"
 #include "dsp/LowPassFilter.h"
@@ -9,27 +8,26 @@
 namespace AudioEngine
 {
 
-    DSPModule* DSPFactory::Create(
-        const std::string& moduleName)
+    std::unique_ptr<DSPModule> DSPFactory::Create(const std::string& moduleName)
     {
         if (moduleName == "Gain")
         {
-            return new Gain();
+            return std::make_unique<Gain>();
         }
 
         if (moduleName == "LowPass")
         {
-            return new LowPassFilter();
+            return std::make_unique<LowPassFilter>();
         }
 
         if (moduleName == "HighPass")
         {
-            return new HighPassFilter();
+            return std::make_unique<HighPassFilter>();
         }
 
         if (moduleName == "Delay")
         {
-            return new Delay();
+            return std::make_unique<Delay>();
         }
 
         return nullptr;

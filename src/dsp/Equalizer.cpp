@@ -5,56 +5,35 @@ namespace AudioEngine
 
     Equalizer::Equalizer()
     {
-        m_lowPass.SetAlpha(0.15f);
-
-        m_highPass.SetAlpha(0.15f);
-
-        m_bassGain.SetGain(1.0f);
-
-        m_midGain.SetGain(1.0f);
-
-        m_trebleGain.SetGain(1.0f);
+        // Initialize bands with a flat 0dB response at 48kHz
+        m_lowBand.SetLowShelf(48000.0f, 250.0f, 0.707f, 0.0f);
+        m_midBand.SetPeaking(48000.0f, 1000.0f, 0.707f, 0.0f);
+        m_highBand.SetHighShelf(48000.0f, 4000.0f, 0.707f, 0.0f);
     }
 
-    void Equalizer::SetBassGain(float gain)
+    void Equalizer::SetLowGain(float dbGain)
     {
-        m_bassGain.SetGain(gain);
+        m_lowBand.SetLowShelf(48000.0f, 250.0f, 0.707f, dbGain);
     }
 
-    void Equalizer::SetMidGain(float gain)
+    void Equalizer::SetMidGain(float dbGain)
     {
-        m_midGain.SetGain(gain);
+        m_midBand.SetPeaking(48000.0f, 1000.0f, 0.707f, dbGain);
     }
 
-    void Equalizer::SetTrebleGain(float gain)
+    void Equalizer::SetHighGain(float dbGain)
     {
-        m_trebleGain.SetGain(gain);
+        m_highBand.SetHighShelf(48000.0f, 4000.0f, 0.707f, dbGain);
     }
 
     float Equalizer::Process(float sample)
     {
-        float bass =
-            m_lowPass.Process(sample);
+        // Pass the sample sequentially through all three bands
+        sample = m_lowBand.Process(sample);
+        sample = m_midBand.Process(sample);
+        sample = m_highBand.Process(sample);
 
-        float treble =
-            m_highPass.Process(sample);
-
-        float mid =
-            sample - bass - treble;
-
-        bass =
-            m_bassGain.Process(bass);
-
-        mid =
-            m_midGain.Process(mid);
-
-        treble =
-            m_trebleGain.Process(treble);
-
-        return
-            bass +
-            mid +
-            treble;
+        return sample;
     }
 
 }

@@ -1,11 +1,17 @@
 #include "core/AudioEngine.h"
 #include "Logger.h"
+#include "dsp/BiquadFilterTest.h"
 
 #include <thread>
 #include <chrono>
 
 int main()
 {
+    if (!AudioEngine::RunBiquadFilterTests())
+    {
+        return -1;
+    }
+
     AudioEngine::AudioEngine engine;
 
     if (!engine.Initialize())
