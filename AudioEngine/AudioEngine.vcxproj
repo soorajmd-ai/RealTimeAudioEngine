@@ -111,13 +111,13 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)src;$(SolutionDir)third_party\json;$(SolutionDir)third_party\portaudio\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)src;$(SolutionDir)third_party\json;$(SolutionDir)third_party\portaudio\include;$(SolutionDir)third_party\imgui;$(SolutionDir)third_party\imgui\backends;$(SolutionDir)third_party\glfw\include;$(SolutionDir)third_party\imnodes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)third_party\portaudio\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>portaudio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)third_party\portaudio\build\Debug;$(SolutionDir)third_party\glfw\build\src\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>portaudio.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
@@ -148,7 +148,6 @@
     <ClCompile Include="..\src\dsp\BiquadFilter.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\src\dsp\BiquadFilterTest.cpp" />
     <ClCompile Include="..\src\dsp\Delay.cpp" />
     <ClCompile Include="..\src\dsp\DSPChain.cpp" />
     <ClCompile Include="..\src\dsp\Equalizer.cpp" />
@@ -160,13 +159,19 @@
     <ClCompile Include="..\src\Logger.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\thread\ThreadManager.cpp" />
+    <ClCompile Include="..\third_party\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\third_party\imgui\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\third_party\imgui\imgui.cpp" />
+    <ClCompile Include="..\third_party\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\third_party\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\third_party\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="..\third_party\imnodes\imnodes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\buffer\RingBuffer.h" />
     <ClInclude Include="..\include\ConfigManager.h" />
     <ClInclude Include="..\include\core\AudioEngine.h" />
     <ClInclude Include="..\include\dsp\BiquadFilter.h" />
-    <ClInclude Include="..\include\dsp\BiquadFilterTest.h" />
     <ClInclude Include="..\include\dsp\Delay.h" />
     <ClInclude Include="..\include\dsp\DSPChain.h" />
     <ClInclude Include="..\include\dsp\DSPFactory.h" />
@@ -179,6 +184,7 @@
     <ClInclude Include="..\include\io\PortAudioWrapper.h" />
     <ClInclude Include="..\include\Logger.h" />
     <ClInclude Include="..\include\thread\ThreadManager.h" />
+    <ClInclude Include="..\third_party\imnodes\imnodes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
