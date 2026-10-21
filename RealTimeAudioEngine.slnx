@@ -1,0 +1,8 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="CoreDSP/CoreDSP.vcxproj" Id="b41878e8-44a9-4063-aa4d-09a42970faee" />
+  <Project Path="GTT_Host/GTT_Host.vcxproj" Id="f370bceb-b217-44e2-bf44-d1dbd3ff0dfb" />
+</Solution>
