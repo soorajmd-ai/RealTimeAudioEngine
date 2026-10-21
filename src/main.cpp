@@ -141,6 +141,15 @@ int main()
         ImNodes::BeginNode(6);
         ImNodes::BeginNodeTitleBar(); ImGui::TextUnformatted("Audio Out (Speaker)"); ImNodes::EndNodeTitleBar();
         ImNodes::BeginInputAttribute(60); ImGui::Text("Ch 1 In"); ImNodes::EndInputAttribute();
+
+        // --- LIVE OSCILLOSCOPE ---
+        const std::vector<float>& audioData = engine.GetVisualizerData();
+        ImGui::PushItemWidth(200.0f);
+        // Draw the waveform (Size: 200x80 pixels, Range: -1.0 to 1.0 amplitude)
+        ImGui::PlotLines("##Scope", audioData.data(), (int)audioData.size(), 0, nullptr, -1.0f, 1.0f, ImVec2(0, 80));
+        ImGui::PopItemWidth();
+        // -------------------------
+
         ImNodes::EndNode();
 
         // --- DRAW WIRES ---

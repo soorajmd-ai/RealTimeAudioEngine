@@ -4,6 +4,7 @@
 #include "thread/ThreadManager.h"
 #include "io/PortAudioWrapper.h"
 #include "io/AudioStream.h"
+#include <vector>
 
 namespace AudioEngine
 {
@@ -17,7 +18,6 @@ namespace AudioEngine
         void Run();
         void Shutdown();
 
-        // Live GUI Controls
         void SetLiveGain(float gain);
         void SetLiveDelayFeedback(float feedback);
         void SetLiveLowPassAlpha(float alpha);
@@ -33,6 +33,9 @@ namespace AudioEngine
         float GetLiveEqLow() const;
         float GetLiveEqMid() const;
         float GetLiveEqHigh() const;
+
+        // Fetch Visualizer Snapshot
+        const std::vector<float>& GetVisualizerData() const;
 
     private:
         ConfigManager m_configManager;

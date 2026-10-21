@@ -3,6 +3,7 @@
 #include "buffer/RingBuffer.h"
 #include "dsp/DSPChain.h"
 #include <portaudio.h>
+#include <vector>
 
 namespace AudioEngine
 {
@@ -27,7 +28,6 @@ namespace AudioEngine
         void SetDelaySamples(int samples);
         void SetDelayFeedback(float feedback);
 
-        // Equalizer Setters
         void SetEqLowGain(float dbGain);
         void SetEqMidGain(float dbGain);
         void SetEqHighGain(float dbGain);
@@ -38,12 +38,14 @@ namespace AudioEngine
         void EnableDelay(bool enable);
         void EnableEqualizer(bool enable);
 
-        // Getters for the GUI
         float GetGain() const { return m_gainValue; }
         float GetDelayFeedback() const { return m_delayFeedbackValue; }
         float GetEqLowGain() const { return m_eqLowGain; }
         float GetEqMidGain() const { return m_eqMidGain; }
         float GetEqHighGain() const { return m_eqHighGain; }
+
+        // Fetch the live waveform data
+        const std::vector<float>& GetVisualizerData() const { return m_visualizerData; }
 
         int ProcessAudio(const void* input, void* output, unsigned long frameCount);
 
@@ -52,28 +54,27 @@ namespace AudioEngine
         DSPChain m_dspChain;
         PaStream* m_stream;
 
-        // Observer pointers for real-time GUI control
         Gain* m_activeGain;
         Delay* m_activeDelay;
         Equalizer* m_activeEqualizer;
 
-        // Enable flags
         bool m_gainEnabled;
         bool m_lowPassEnabled;
         bool m_highPassEnabled;
         bool m_delayEnabled;
         bool m_equalizerEnabled;
 
-        // Parameter values
         float m_gainValue;
         float m_lowPassAlphaValue;
         float m_highPassAlphaValue;
         int m_delaySamplesValue;
         float m_delayFeedbackValue;
 
-        // Equalizer values (in Decibels)
         float m_eqLowGain;
         float m_eqMidGain;
         float m_eqHighGain;
+
+        // Lock-free snapshot buffer for the UI Oscilloscope
+        std::vector<float> m_visualizerData;
     };
 }

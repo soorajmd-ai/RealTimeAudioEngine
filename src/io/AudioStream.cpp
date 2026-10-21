@@ -6,6 +6,7 @@
 #include "dsp/Delay.h"
 #include "dsp/Equalizer.h"
 #include <memory>
+#include <algorithm>
 
 namespace AudioEngine
 {
@@ -37,7 +38,8 @@ namespace AudioEngine
         m_delayFeedbackValue(0.5f),
         m_eqLowGain(0.0f),
         m_eqMidGain(0.0f),
-        m_eqHighGain(0.0f)
+        m_eqHighGain(0.0f),
+        m_visualizerData(512, 0.0f) // Initialize 512 frames for the UI
     {}
 
     AudioStream::~AudioStream()
@@ -45,7 +47,6 @@ namespace AudioEngine
         Close();
     }
 
-    // Live Setters
     void AudioStream::SetGain(float gain) { m_gainValue = gain; if (m_activeGain) m_activeGain->SetGain(gain); }
     void AudioStream::SetDelayFeedback(float feedback) { m_delayFeedbackValue = feedback; if (m_activeDelay) m_activeDelay->SetFeedback(feedback); }
     void AudioStream::SetLowPassAlpha(float alpha) { m_lowPassAlphaValue = alpha; }
@@ -73,21 +74,18 @@ namespace AudioEngine
             m_activeGain->SetGain(m_gainValue);
             m_dspChain.AddModule(std::move(gain));
         }
-
         if (m_lowPassEnabled)
         {
             auto lowPass = std::make_unique<LowPassFilter>();
             lowPass->SetAlpha(m_lowPassAlphaValue);
             m_dspChain.AddModule(std::move(lowPass));
         }
-
         if (m_highPassEnabled)
         {
             auto highPass = std::make_unique<HighPassFilter>();
             highPass->SetAlpha(m_highPassAlphaValue);
             m_dspChain.AddModule(std::move(highPass));
         }
-
         if (m_equalizerEnabled)
         {
             auto eq = std::make_unique<Equalizer>();
@@ -97,7 +95,6 @@ namespace AudioEngine
             m_activeEqualizer->SetHighGain(m_eqHighGain);
             m_dspChain.AddModule(std::move(eq));
         }
-
         if (m_delayEnabled)
         {
             auto delay = std::make_unique<Delay>();
@@ -108,7 +105,6 @@ namespace AudioEngine
         }
 
         PaError error = Pa_OpenDefaultStream(&m_stream, 1, 1, paFloat32, 48000, 512, AudioCallback, this);
-
         if (error != paNoError) return false;
 
         Logger::Info("Audio stream opened successfully.");
@@ -146,7 +142,6 @@ namespace AudioEngine
             return paContinue;
         }
 
-        // TYPO FIXED HERE: frameCount
         for (unsigned long i = 0; i < frameCount; ++i)
         {
             m_ringBuffer.push(inputBuffer[i]);
@@ -164,6 +159,14 @@ namespace AudioEngine
                 outputBuffer[i] = 0.0f;
             }
         }
+
+        // --- WRITE TO VISUALIZER SNAPSHOT ---
+        unsigned long copyCount = std::min(frameCount, (unsigned long)m_visualizerData.size());
+        for (unsigned long i = 0; i < copyCount; ++i)
+        {
+            m_visualizerData[i] = outputBuffer[i];
+        }
+
         return paContinue;
     }
 

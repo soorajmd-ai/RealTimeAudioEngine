@@ -81,4 +81,10 @@ namespace AudioEngine
     float AudioEngine::GetLiveEqMid() const { return m_audioStream.GetEqMidGain(); }
     float AudioEngine::GetLiveEqHigh() const { return m_audioStream.GetEqHighGain(); }
 
+    // --- VISUALIZER ---
+    const std::vector<float>& AudioEngine::GetVisualizerData() const
+    {
+        return m_audioStream.GetVisualizerData();
+    }
+
 } // namespace AudioEngine
