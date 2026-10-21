@@ -1,5 +1,6 @@
 #pragma once
 
+#include "api/CoreDSP_API.h" // Include your new macro
 #include "ConfigManager.h"
 #include "thread/ThreadManager.h"
 #include "io/PortAudioWrapper.h"
@@ -9,7 +10,10 @@
 
 namespace AudioEngine
 {
-    class AudioEngine
+#pragma warning(push)
+#pragma warning(disable: 4251)
+    // Tag the class with COREDSP_API to expose it outside the DLL
+    class COREDSP_API AudioEngine
     {
     public:
         AudioEngine();
@@ -46,4 +50,5 @@ namespace AudioEngine
         PortAudioWrapper m_portAudio;
         AudioStream m_audioStream;
     };
+#pragma warning(pop)
 }

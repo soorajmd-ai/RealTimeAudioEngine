@@ -44,3 +44,22 @@ cmake-build-*/
 Thumbs.db
 Desktop.ini
 .DS_Storeimgui.ini
+
+# ==========================================
+# OS Files & UI State
+# ==========================================
+
+Thumbs.db
+Desktop.ini
+.DS_Store
+imgui.ini
+
+# ==========================================
+# Binary & Linking Artifacts (Safety Net)
+# ==========================================
+*.dll
+*.exe
+*.lib
+*.exp
+*.pdb
+*.ilk
