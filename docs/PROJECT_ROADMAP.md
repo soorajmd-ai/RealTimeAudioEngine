@@ -26,6 +26,9 @@
 - **Signal Flow Designer:** Integrated ImNodes to visually map the DSP processing pipeline.
 - **Live Parameter Tuning:** Bridged UI and audio threads for real-time DSP manipulation via sliders.
 - **Live Audio Visualization:** Integrated real-time oscilloscopes into the node canvas via lock-free snapshot buffers.
+- ✅ **Dynamic Routing (DAG):** Upgraded the underlying C++ `DSPChain` from a linear array to a Directed Acyclic Graph utilizing 
+Kahn's Algorithm.
+- ✅ **Interactive Wires:** Linked the ImNodes UI wires directly to the C++ DAG using thread-safe `std::unique_lock`, allowing users to draw, reroute, and delete audio wiring dynamically without interrupting PortAudio.
 
 ---
 
@@ -40,3 +43,6 @@
 - Project Save/Load (Serialize node graph to JSON)
 - Reverb / FFT Modules
 - Performance Optimization & SIMD Intrinsics
+
+## Current Phase
+Phase 5 - Workspace Serialization and Saving

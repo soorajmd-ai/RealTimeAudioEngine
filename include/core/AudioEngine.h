@@ -5,6 +5,7 @@
 #include "io/PortAudioWrapper.h"
 #include "io/AudioStream.h"
 #include <vector>
+#include <utility>
 
 namespace AudioEngine
 {
@@ -34,8 +35,10 @@ namespace AudioEngine
         float GetLiveEqMid() const;
         float GetLiveEqHigh() const;
 
-        // Fetch Visualizer Snapshot
         const std::vector<float>& GetVisualizerData() const;
+
+        // Pass dynamic wiring to the stream
+        void SetGraphLinks(const std::vector<std::pair<int, int>>& links);
 
     private:
         ConfigManager m_configManager;

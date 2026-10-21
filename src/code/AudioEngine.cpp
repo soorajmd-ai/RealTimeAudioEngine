@@ -20,13 +20,7 @@ namespace AudioEngine
     {
         Logger::Info("Initializing Audio Engine...");
 
-        if (!m_configManager.Load("config/audio_config.json"))
-        {
-            Logger::Error("Failed to load configuration.");
-            return false;
-        }
-
-        Logger::Info("Configuration loaded successfully.");
+        if (!m_configManager.Load("config/audio_config.json")) return false;
 
         m_audioStream.EnableGain(m_configManager.IsGainEnabled());
         m_audioStream.EnableLowPass(m_configManager.IsLowPassEnabled());
@@ -61,8 +55,6 @@ namespace AudioEngine
         m_threadManager.Stop();
     }
 
-    // --- LIVE GUI CONTROLS ---
-
     void AudioEngine::SetLiveGain(float gain) { m_audioStream.SetGain(gain); }
     void AudioEngine::SetLiveDelayFeedback(float feedback) { m_audioStream.SetDelayFeedback(feedback); }
     void AudioEngine::SetLiveLowPassAlpha(float alpha) { m_audioStream.SetLowPassAlpha(alpha); }
@@ -81,10 +73,12 @@ namespace AudioEngine
     float AudioEngine::GetLiveEqMid() const { return m_audioStream.GetEqMidGain(); }
     float AudioEngine::GetLiveEqHigh() const { return m_audioStream.GetEqHighGain(); }
 
-    // --- VISUALIZER ---
-    const std::vector<float>& AudioEngine::GetVisualizerData() const
+    const std::vector<float>& AudioEngine::GetVisualizerData() const { return m_audioStream.GetVisualizerData(); }
+
+    // --- DYNAMIC GRAPH WIRING ---
+    void AudioEngine::SetGraphLinks(const std::vector<std::pair<int, int>>& links)
     {
-        return m_audioStream.GetVisualizerData();
+        m_audioStream.SetGraphLinks(links);
     }
 
 } // namespace AudioEngine

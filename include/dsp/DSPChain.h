@@ -1,19 +1,30 @@
 #pragma once
-
-#include <vector>
+#include "DSPModule.h"
 #include <memory>
-#include "dsp/DSPModule.h"
+#include <vector>
+#include <map>
+#include <mutex>
 
-namespace AudioEngine
-{
-    class DSPChain
-    {
+namespace AudioEngine {
+    class DSPChain {
     public:
-        void AddModule(std::unique_ptr<DSPModule> module);
+        DSPChain() = default;
+        ~DSPChain() = default;
 
-        float Process(float sample);
+        // Modules are now added with an explicit Node ID
+        void AddModule(int nodeId, std::unique_ptr<DSPModule> module);
+
+        // Updates the wiring dynamically from the UI
+        void SetLinks(const std::vector<std::pair<int, int>>& links);
+
+        float Process(float inputSample);
 
     private:
-        std::vector<std::unique_ptr<DSPModule>> m_modules;
+        std::map<int, std::unique_ptr<DSPModule>> m_modules;
+        std::vector<std::pair<int, int>> m_links;
+        std::vector<int> m_executionOrder;
+        std::mutex m_linkMutex;
+
+        void UpdateExecutionOrder();
     };
 }

@@ -4,6 +4,7 @@
 #include "dsp/DSPChain.h"
 #include <portaudio.h>
 #include <vector>
+#include <utility>
 
 namespace AudioEngine
 {
@@ -44,8 +45,10 @@ namespace AudioEngine
         float GetEqMidGain() const { return m_eqMidGain; }
         float GetEqHighGain() const { return m_eqHighGain; }
 
-        // Fetch the live waveform data
         const std::vector<float>& GetVisualizerData() const { return m_visualizerData; }
+
+        // Pass dynamic wiring down to the graph
+        void SetGraphLinks(const std::vector<std::pair<int, int>>& links);
 
         int ProcessAudio(const void* input, void* output, unsigned long frameCount);
 
@@ -74,7 +77,6 @@ namespace AudioEngine
         float m_eqMidGain;
         float m_eqHighGain;
 
-        // Lock-free snapshot buffer for the UI Oscilloscope
         std::vector<float> m_visualizerData;
     };
 }

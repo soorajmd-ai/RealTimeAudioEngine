@@ -39,7 +39,7 @@ namespace AudioEngine
         m_eqLowGain(0.0f),
         m_eqMidGain(0.0f),
         m_eqHighGain(0.0f),
-        m_visualizerData(512, 0.0f) // Initialize 512 frames for the UI
+        m_visualizerData(512, 0.0f)
     {}
 
     AudioStream::~AudioStream()
@@ -63,46 +63,43 @@ namespace AudioEngine
     void AudioStream::EnableDelay(bool enable) { m_delayEnabled = enable; }
     void AudioStream::EnableEqualizer(bool enable) { m_equalizerEnabled = enable; }
 
+    void AudioStream::SetGraphLinks(const std::vector<std::pair<int, int>>& links)
+    {
+        m_dspChain.SetLinks(links);
+    }
+
     bool AudioStream::OpenDefaultStream()
     {
         Logger::Info("Opening default audio stream...");
 
-        if (m_gainEnabled)
-        {
-            auto gain = std::make_unique<Gain>();
-            m_activeGain = gain.get();
-            m_activeGain->SetGain(m_gainValue);
-            m_dspChain.AddModule(std::move(gain));
-        }
-        if (m_lowPassEnabled)
-        {
-            auto lowPass = std::make_unique<LowPassFilter>();
-            lowPass->SetAlpha(m_lowPassAlphaValue);
-            m_dspChain.AddModule(std::move(lowPass));
-        }
-        if (m_highPassEnabled)
-        {
-            auto highPass = std::make_unique<HighPassFilter>();
-            highPass->SetAlpha(m_highPassAlphaValue);
-            m_dspChain.AddModule(std::move(highPass));
-        }
-        if (m_equalizerEnabled)
-        {
-            auto eq = std::make_unique<Equalizer>();
-            m_activeEqualizer = eq.get();
-            m_activeEqualizer->SetLowGain(m_eqLowGain);
-            m_activeEqualizer->SetMidGain(m_eqMidGain);
-            m_activeEqualizer->SetHighGain(m_eqHighGain);
-            m_dspChain.AddModule(std::move(eq));
-        }
-        if (m_delayEnabled)
-        {
-            auto delay = std::make_unique<Delay>();
-            m_activeDelay = delay.get();
-            m_activeDelay->SetDelaySamples(m_delaySamplesValue);
-            m_activeDelay->SetFeedback(m_delayFeedbackValue);
-            m_dspChain.AddModule(std::move(delay));
-        }
+        // THE FIX: In a node-based DAG architecture, we must instantiate ALL modules 
+        // unconditionally. The visual wires now determine what is actually processed!
+
+        auto gain = std::make_unique<Gain>();
+        m_activeGain = gain.get();
+        m_activeGain->SetGain(m_gainValue);
+        m_dspChain.AddModule(2, std::move(gain));
+
+        auto lowPass = std::make_unique<LowPassFilter>();
+        lowPass->SetAlpha(m_lowPassAlphaValue);
+        m_dspChain.AddModule(3, std::move(lowPass));
+
+        auto highPass = std::make_unique<HighPassFilter>();
+        highPass->SetAlpha(m_highPassAlphaValue);
+        m_dspChain.AddModule(4, std::move(highPass));
+
+        auto eq = std::make_unique<Equalizer>();
+        m_activeEqualizer = eq.get();
+        m_activeEqualizer->SetLowGain(m_eqLowGain);
+        m_activeEqualizer->SetMidGain(m_eqMidGain);
+        m_activeEqualizer->SetHighGain(m_eqHighGain);
+        m_dspChain.AddModule(7, std::move(eq));
+
+        auto delay = std::make_unique<Delay>();
+        m_activeDelay = delay.get();
+        m_activeDelay->SetDelaySamples(m_delaySamplesValue);
+        m_activeDelay->SetFeedback(m_delayFeedbackValue);
+        m_dspChain.AddModule(5, std::move(delay));
 
         PaError error = Pa_OpenDefaultStream(&m_stream, 1, 1, paFloat32, 48000, 512, AudioCallback, this);
         if (error != paNoError) return false;
@@ -142,25 +139,15 @@ namespace AudioEngine
             return paContinue;
         }
 
-        for (unsigned long i = 0; i < frameCount; ++i)
-        {
-            m_ringBuffer.push(inputBuffer[i]);
-        }
+        for (unsigned long i = 0; i < frameCount; ++i) m_ringBuffer.push(inputBuffer[i]);
 
         for (unsigned long i = 0; i < frameCount; ++i)
         {
             float sample = 0.0f;
-            if (m_ringBuffer.pop(sample))
-            {
-                outputBuffer[i] = m_dspChain.Process(sample);
-            }
-            else
-            {
-                outputBuffer[i] = 0.0f;
-            }
+            if (m_ringBuffer.pop(sample)) outputBuffer[i] = m_dspChain.Process(sample);
+            else outputBuffer[i] = 0.0f;
         }
 
-        // --- WRITE TO VISUALIZER SNAPSHOT ---
         unsigned long copyCount = std::min(frameCount, (unsigned long)m_visualizerData.size());
         for (unsigned long i = 0; i < copyCount; ++i)
         {
