@@ -24,7 +24,15 @@ namespace AudioEngine
 
         m_running = true;
 
-        m_thread = std::thread(&ThreadManager::Worker, this);
+        try
+        {
+            m_thread = std::thread(&ThreadManager::Worker, this);
+        }
+        catch (...)
+        {
+            m_running = false;
+            throw;
+        }
     }
 
     void ThreadManager::Stop()

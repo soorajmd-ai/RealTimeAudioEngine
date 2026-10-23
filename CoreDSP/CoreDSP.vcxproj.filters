@@ -69,6 +69,9 @@
     <ClInclude Include="..\include\Logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\api\DSPBackendAPI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\code\AudioEngine.cpp">
@@ -111,6 +114,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\include\dsp\DSPFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\api\DSPBackendAPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

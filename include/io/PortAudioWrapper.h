@@ -7,15 +7,15 @@ namespace AudioEngine
     class PortAudioWrapper
     {
     public:
-
         PortAudioWrapper();
-
         ~PortAudioWrapper();
 
         bool Initialize();
-
         void Terminate();
 
         void PrintAudioDevices() const;
+
+    private:
+        bool m_initialized = false;
     };
 }

@@ -7,6 +7,7 @@
 #include "io/AudioStream.h"
 #include <vector>
 #include <utility>
+#include <string>
 
 namespace AudioEngine
 {
@@ -20,7 +21,7 @@ namespace AudioEngine
         ~AudioEngine();
 
         bool Initialize();
-        void Run();
+        bool Run();
         void Shutdown();
 
         void SetLiveGain(float gain);
@@ -39,10 +40,11 @@ namespace AudioEngine
         float GetLiveEqMid() const;
         float GetLiveEqHigh() const;
 
-        const std::vector<float>& GetVisualizerData() const;
+        const std::vector<float>& GetVisualizerData();
 
         // Pass dynamic wiring to the stream
         void SetGraphLinks(const std::vector<std::pair<int, int>>& links);
+        bool AddDSPModule(int nodeId, const std::string& moduleName);
 
     private:
         ConfigManager m_configManager;

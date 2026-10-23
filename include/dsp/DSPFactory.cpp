@@ -4,6 +4,7 @@
 #include "dsp/LowPassFilter.h"
 #include "dsp/HighPassFilter.h"
 #include "dsp/Delay.h"
+#include "dsp/Equalizer.h"
 
 namespace AudioEngine
 {
@@ -28,6 +29,11 @@ namespace AudioEngine
         if (moduleName == "Delay")
         {
             return std::make_unique<Delay>();
+        }
+
+        if (moduleName == "Equalizer")
+        {
+            return std::make_unique<Equalizer>();
         }
 
         return nullptr;

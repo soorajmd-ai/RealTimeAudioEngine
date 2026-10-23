@@ -1,16 +1,22 @@
 #pragma once
 
 #include "buffer/RingBuffer.h"
+#include "buffer/VisualizerSPSCQueue.h"
 #include "dsp/DSPChain.h"
 #include <portaudio.h>
 #include <vector>
 #include <utility>
+#include <atomic>
+#include <cstddef>
+#include <string>
 
 namespace AudioEngine
 {
     class Gain;
     class Delay;
     class Equalizer;
+    class LowPassFilter;
+    class HighPassFilter;
 
     class AudioStream
     {
@@ -39,16 +45,46 @@ namespace AudioEngine
         void EnableDelay(bool enable);
         void EnableEqualizer(bool enable);
 
-        float GetGain() const { return m_gainValue; }
-        float GetDelayFeedback() const { return m_delayFeedbackValue; }
-        float GetEqLowGain() const { return m_eqLowGain; }
-        float GetEqMidGain() const { return m_eqMidGain; }
-        float GetEqHighGain() const { return m_eqHighGain; }
+        float GetGain() const
+        {
+            return m_gainValue.load(std::memory_order_relaxed);
+        }
 
-        const std::vector<float>& GetVisualizerData() const { return m_visualizerData; }
+        float GetLowPassAlpha() const
+        {
+            return m_lowPassAlphaValue.load(std::memory_order_relaxed);
+        }
+
+        float GetHighPassAlpha() const
+        {
+            return m_highPassAlphaValue.load(std::memory_order_relaxed);
+        }
+
+        float GetDelayFeedback() const
+        {
+            return m_delayFeedbackValue.load(std::memory_order_relaxed);
+        }
+
+        float GetEqLowGain() const
+        {
+            return m_eqLowGain.load(std::memory_order_relaxed);
+        }
+
+        float GetEqMidGain() const
+        {
+            return m_eqMidGain.load(std::memory_order_relaxed);
+        }
+
+        float GetEqHighGain() const
+        {
+            return m_eqHighGain.load(std::memory_order_relaxed);
+        }
+
+        const std::vector<float>& GetVisualizerData();
 
         // Pass dynamic wiring down to the graph
         void SetGraphLinks(const std::vector<std::pair<int, int>>& links);
+        bool AddDSPModule(int nodeId, const std::string& moduleName);
 
         int ProcessAudio(const void* input, void* output, unsigned long frameCount);
 
@@ -58,6 +94,8 @@ namespace AudioEngine
         PaStream* m_stream;
 
         Gain* m_activeGain;
+        LowPassFilter* m_activeLowPass;
+        HighPassFilter* m_activeHighPass;
         Delay* m_activeDelay;
         Equalizer* m_activeEqualizer;
 
@@ -67,16 +105,32 @@ namespace AudioEngine
         bool m_delayEnabled;
         bool m_equalizerEnabled;
 
-        float m_gainValue;
-        float m_lowPassAlphaValue;
-        float m_highPassAlphaValue;
-        int m_delaySamplesValue;
-        float m_delayFeedbackValue;
+        void ApplyPendingParameters();
 
-        float m_eqLowGain;
-        float m_eqMidGain;
-        float m_eqHighGain;
+        // These cached values are accessed by the audio callback only.
+        float m_lastAppliedGain;
+        float m_lastAppliedLowPassAlpha;
+        float m_lastAppliedHighPassAlpha;
+        float m_lastAppliedDelayFeedback;
+        float m_lastAppliedEqLowGain;
+        float m_lastAppliedEqMidGain;
+        float m_lastAppliedEqHighGain;
 
+        std::atomic<float> m_gainValue;
+        std::atomic<float> m_lowPassAlphaValue;
+        std::atomic<float> m_highPassAlphaValue;
+        std::atomic<int> m_delaySamplesValue;
+        std::atomic<float> m_delayFeedbackValue;
+
+        std::atomic<float> m_eqLowGain;
+        std::atomic<float> m_eqMidGain;
+        std::atomic<float> m_eqHighGain;
+
+        VisualizerSPSCQueue m_visualizerQueue;
+
+        // These buffers are accessed only by the visualizer consumer.
+        std::vector<float> m_visualizerHistory;
         std::vector<float> m_visualizerData;
+        std::size_t m_visualizerWriteIndex;
     };
 }
